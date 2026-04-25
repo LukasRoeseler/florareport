@@ -30,7 +30,8 @@ nocite: |
   @wallrich2026flora, @roseler2024replication, @roseler2025r2editorial
 abstract: |
   *To be written.* This abstract will summarize the report's aims, methods, key
-  findings, and contributions to open science.
+  findings, and contributions to open science. (Canonical version in
+  sections/abstract.md — copy here after editing.)
 execute:
   echo: false
   warning: false
@@ -75,8 +76,7 @@ version of the FLoRA dataset. Last build: **`r format(Sys.time(), "%Y-%m-%d %H:%
 ::: {.flora-box}
 ### Lay Summary {.box-title}
 
-*To be written.* A plain-language summary (~150–250 words) explaining what FLoRA
-is, why it matters, and what this report contributes.
+{{< include sections/lay-summary.md >}}
 :::
 
 ::: {.flora-box}
@@ -91,65 +91,15 @@ the Sciences and Humanities.* [URL]
 And cite the underlying dataset as @wallrich2026flora.
 :::
 
-# Theory {#sec-theory}
+<!-- ============================================================= -->
+<!-- PROSE SECTIONS — edit the .md files in sections/, not here.    -->
+<!-- ============================================================= -->
 
-*To be written.* Background and conceptual framing covering the replication and
-reproduction crises, why a comprehensive library matters, and the relationship
-between FLoRA and previous tracking efforts such as FReD
-[@roseler2024replication].
+{{< include sections/theory.md >}}
 
-## The Replication and Reproduction Crises
+{{< include sections/methods.md >}}
 
-*To be written.* Overview of the replication crisis in psychology
-[@osc2015reproducibility; @camerer2016economics] and the broader credibility
-revolution [@vazire2018credibility; @korbmacher2023replication].
-
-## From FReD to FLoRA
-
-*To be written.* How the FORRT Replication Database (FReD) evolved into FLoRA,
-expanding scope beyond psychology and adding reproductions as a tracked category.
-
-## Defining Replications and Reproductions
-
-*To be written.* Definitions following @parsons2022glossary and the FLoRA
-inclusion criteria: replications collect new data; reproductions re-analyse the
-original data.
-
-# Methods {#sec-methods}
-
-*To be written.* How the FLoRA dataset is constructed and how this report
-processes it.
-
-## Inclusion Criteria
-
-*To be written.* Studies must self-identify as a replication or reproduction,
-identify a specific target study, and replicate a study or experiment (not just a
-single association).
-
-## Coding of Outcomes
-
-### Replication Outcomes
-
-*To be written.* Outcomes are coded as **Successful**, **Failed**, or **Mixed**
-based on how the replication authors characterise their results.
-
-### Reproduction Outcomes
-
-*To be written.* Reproductions are coded along two dimensions: computational
-success (Computationally Successful vs. Computational Issues) and robustness
-(Robust, Robustness Challenges, or Robustness Not Checked).
-
-## Data Sources and Contributions
-
-*To be written.* Description of how entries enter FLoRA — community submissions,
-large-scale projects, systematic searches.
-
-## Data Pipeline for This Report
-
-*To be written.* This report is rendered via a GitHub Actions workflow that
-downloads the latest `flora.csv` from the
-[FReD-data repository](https://github.com/forrtproject/FReD-data) daily at
-07:00 CEST and rebuilds this page. All code is open and reproducible.
+<!-- Results: prose comes from the include, R chunks live here -->
 
 # Results {#sec-results}
 
@@ -212,54 +162,17 @@ flora |>
 
 *To be written.*
 
-# Discussion {#sec-discussion}
+{{< include sections/discussion.md >}}
 
-*To be written.* Interpretation of the descriptive findings and their
-implications.
+{{< include sections/limitations.md >}}
 
-## Patterns in Replicability
+{{< include sections/conclusion.md >}}
 
-*To be written.*
+{{< include sections/social-responsibility.md >}}
 
-## Patterns in Reproducibility
+{{< include sections/acknowledgments.md >}}
 
-*To be written.*
-
-## Implications for Researchers, Educators, and Policy
-
-*To be written.*
-
-# Limitations {#sec-limitations}
-
-*To be written.* Honest treatment of caveats, including crowdsourced data
-quality, coverage biases across disciplines, the self-identification
-requirement, and the absence of statistical effect sizes (in contrast to FReD).
-
-# Conclusion {#sec-conclusion}
-
-*To be written.* A concise wrap-up: what FLoRA contributes, where the project is
-heading, and how to engage.
-
-# Social Responsibility {#sec-social-responsibility .unnumbered}
-
-*To be written.* Statement on the open, community-driven, equitable nature of
-FLoRA.
-
-# Acknowledgments {#sec-acknowledgments .unnumbered}
-
-*To be written.* Thanks to the FLoRA contributors, FORRT community, and
-supporting institutions.
-
-# AI Use Statement {#sec-ai-use .unnumbered}
-
-The technical structure of this report (repository layout, GitHub Actions
-workflow, Quarto configuration, and CSS styling) was created with the help of
-Claude Opus 4 (Anthropic). All scientific content, data curation, and
-editorial decisions are the sole responsibility of the authors.
-
-# Funding {#sec-funding .unnumbered}
-
-*To be written.*
+{{< include sections/funding.md >}}
 
 # References {#sec-references .unnumbered}
 
