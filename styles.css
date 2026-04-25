@@ -1,27 +1,31 @@
 /* =========================================================================
-   FLoRA report — light styling inspired by Replication Research (R2).
-   Keep it readable, scholarly, and APA-friendly.
+   FLoRA report — purple theme matching the FLoRA logo.
+   Sans-serif throughout. Journal-style reference popups & sidebar.
    ========================================================================= */
 
 :root {
-  --r2-primary: #0b3a5b;
-  --r2-accent: #c64b3f;
-  --r2-muted: #5b6770;
-  --r2-rule: #d8dde2;
-  --r2-callout-bg: #eef3f7;
+  --flora-purple-dark: #5b2d7e;
+  --flora-purple-mid: #7b4f9e;
+  --flora-purple-light: #c9a8e2;
+  --flora-purple-bg: #f5eefb;
+  --flora-accent: #9b59b6;
+  --flora-muted: #6b6b7b;
+  --flora-rule: #dcd0e8;
+  --flora-text: #1c1c1c;
   --body-max-width: 780px;
 }
 
+/* ---------- Global typography: sans-serif ---------- */
 body {
-  font-family: "Charter", "Source Serif Pro", Georgia, serif;
+  font-family: "Source Sans Pro", -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 1.05rem;
   line-height: 1.65;
-  color: #1c1c1c;
+  color: var(--flora-text);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Source Sans Pro", -apple-system, "Segoe UI", sans-serif;
-  color: var(--r2-primary);
+  font-family: "Source Sans Pro", -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--flora-purple-dark);
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -29,91 +33,202 @@ h1, h2, h3, h4, h5, h6 {
 h1.title {
   font-size: 1.9rem;
   line-height: 1.25;
-  border-bottom: 3px solid var(--r2-primary);
+  border-bottom: 3px solid var(--flora-purple-dark);
   padding-bottom: 0.6rem;
   margin-bottom: 1.2rem;
 }
 
 h2 {
   margin-top: 2.4rem;
-  border-bottom: 1px solid var(--r2-rule);
+  border-bottom: 1px solid var(--flora-rule);
   padding-bottom: 0.25rem;
 }
 
 h3 { margin-top: 1.8rem; }
 
+/* ---------- Links ---------- */
 a, a:visited {
-  color: var(--r2-accent);
+  color: var(--flora-purple-mid);
   text-decoration: none;
-  border-bottom: 1px dotted var(--r2-accent);
+  border-bottom: 1px dotted var(--flora-purple-mid);
 }
-a:hover { border-bottom-style: solid; }
+a:hover {
+  color: var(--flora-purple-dark);
+  border-bottom-style: solid;
+}
 
-/* Abstract block — emulates the boxed abstract in the R2 template */
+/* ---------- Navbar purple accent ---------- */
+.navbar {
+  border-bottom: 3px solid var(--flora-purple-dark) !important;
+}
+.navbar .navbar-brand img {
+  height: 36px;
+  width: auto;
+}
+
+/* ---------- Styled boxes: abstract, keywords, lay summary, citation ---- */
 #abstract,
 .abstract,
-div.abstract {
-  background: var(--r2-callout-bg);
-  border-left: 4px solid var(--r2-primary);
+div.abstract,
+.quarto-title-meta-contents .abstract {
+  background: var(--flora-purple-bg);
+  border-left: 4px solid var(--flora-purple-dark);
   padding: 1rem 1.2rem;
-  margin: 1.5rem 0 2rem 0;
+  margin: 1.5rem 0 1rem 0;
+  font-size: 0.97rem;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Keywords box — match abstract style */
+.quarto-title-meta-heading,
+.quarto-title-meta-contents {
+  font-family: inherit;
+}
+div.quarto-title-meta {
+  background: var(--flora-purple-bg);
+  border-left: 4px solid var(--flora-purple-dark);
+  padding: 0.8rem 1.2rem;
+  margin: 0 0 1rem 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95rem;
+}
+
+/* Custom boxes for lay summary and citation — use flora-box class */
+.flora-box {
+  background: var(--flora-purple-bg);
+  border-left: 4px solid var(--flora-purple-dark);
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0;
+  border-radius: 0 6px 6px 0;
   font-size: 0.97rem;
 }
-
-/* Keywords */
-.keywords {
-  font-size: 0.92rem;
-  color: var(--r2-muted);
-  font-style: italic;
+.flora-box h3,
+.flora-box .box-title {
+  margin-top: 0;
+  color: var(--flora-purple-dark);
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
-/* References — hanging indent in APA style */
+/* ---------- WIP ribbon (top-right corner) ---------- */
+.wip-ribbon {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+}
+.wip-ribbon span {
+  position: absolute;
+  display: block;
+  width: 225px;
+  padding: 8px 0;
+  background: var(--flora-purple-dark);
+  color: #fff;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  transform: rotate(45deg);
+  right: -55px;
+  top: 30px;
+  box-shadow: 0 2px 8px rgba(91, 45, 126, 0.35);
+  pointer-events: auto;
+}
+
+/* ---------- References — hanging indent APA style ---------- */
 #refs > div, .csl-entry {
   padding-left: 1.5em;
   text-indent: -1.5em;
   margin-bottom: 0.6rem;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
-/* Tables */
+/* ---------- Citation hover popups (Quarto citations-hover) ---------- */
+/* Style the built-in Quarto citation popup to match theme */
+.citation-popup,
+.quarto-citation-popup,
+div[id^="ref-popup-"] {
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 0.88rem;
+  max-width: 420px;
+  border: 1px solid var(--flora-rule);
+  border-left: 4px solid var(--flora-purple-dark);
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(91, 45, 126, 0.15);
+  padding: 0.8rem 1rem;
+  background: #fff;
+}
+
+/* ---------- Tables ---------- */
 table.table {
   font-size: 0.94rem;
 }
 table caption {
   caption-side: top;
   font-weight: 600;
-  color: var(--r2-primary);
+  color: var(--flora-purple-dark);
 }
 
-/* Figures */
+/* ---------- Figures ---------- */
 figure.quarto-float-fig img {
   max-width: 100%;
   height: auto;
 }
 figcaption {
   font-size: 0.9rem;
-  color: var(--r2-muted);
+  color: var(--flora-muted);
 }
 
-/* Code blocks */
+/* ---------- Code blocks ---------- */
 pre, code {
   font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
   font-size: 0.88rem;
 }
 pre {
   background: #f6f8fa;
-  border: 1px solid var(--r2-rule);
+  border: 1px solid var(--flora-rule);
   border-radius: 4px;
   padding: 0.8rem 1rem;
 }
 
-/* Callouts */
-.callout-note {
-  border-left-color: var(--r2-primary) !important;
+/* Hide the </> Code button globally */
+.code-tools-button,
+button.code-tools-button,
+.quarto-code-tools,
+#quarto-code-tools {
+  display: none !important;
 }
 
-/* Print / PDF tweaks */
+/* ---------- Callouts ---------- */
+.callout-note {
+  border-left-color: var(--flora-purple-dark) !important;
+}
+
+/* ---------- TOC left sidebar — purple highlights ---------- */
+.sidebar nav[role="doc-toc"] a.active {
+  color: var(--flora-purple-dark);
+  border-left-color: var(--flora-purple-dark);
+}
+
+/* ---------- Footer ---------- */
+.nav-footer {
+  border-top: 2px solid var(--flora-purple-dark);
+  font-size: 0.88rem;
+}
+.nav-footer a {
+  color: var(--flora-purple-mid);
+}
+
+/* ---------- Print ---------- */
 @media print {
+  .wip-ribbon { display: none; }
   a { color: black; border-bottom: none; }
   h1, h2, h3 { break-after: avoid; }
 }

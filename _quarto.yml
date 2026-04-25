@@ -7,25 +7,30 @@ project:
 website:
   title: "FLoRA Report"
   description: "The FORRT Library of Reproduction and Replication Attempts"
-  site-url: "https://lukasroeseler.github.io/flora-report"
-  repo-url: "https://github.com/lukasroeseler/flora-report"
-  repo-actions: [edit, source, issue]
+  favicon: "https://raw.githubusercontent.com/forrtproject/flora-explorer/refs/heads/main/logo.svg"
+  site-url: "https://your-username.github.io/flora-report"
+  repo-url: "https://github.com/your-username/flora-report"
+  repo-actions: [issue]
   page-navigation: true
   back-to-top-navigation: true
   navbar:
     background: light
     search: true
+    logo: "https://raw.githubusercontent.com/forrtproject/flora-explorer/refs/heads/main/logo.svg"
+    logo-alt: "FLoRA logo"
     left:
       - text: "Report"
         href: index.qmd
-      - text: "FLoRA Project"
+      - text: "FORRT Replication Hub"
         href: "https://forrt.org/replications/"
-      - text: "FReD Explorer"
-        href: "https://forrt-replications.shinyapps.io/fred_explorer"
   page-footer:
+    center: |
+      **Recommended citation:** [Author] (`r format(Sys.Date(), '%Y')`).
+      *The FORRT Library of Reproduction and Replication Attempts.*
+      [URL]. Data: Wallrich, Röseler et al. (2026), OSF.
+      [doi.org/10.17605/OSF.IO/9R62X](https://doi.org/10.17605/OSF.IO/9R62X)
     left: |
-      Built with [Quarto](https://quarto.org/). Data from
-      [FLoRA](https://forrt.org/replications/), licensed CC BY 4.0.
+      Built with [Quarto](https://quarto.org/). Data licensed CC BY 4.0.
     right: "Last updated: today"
 
 format:
@@ -34,6 +39,10 @@ format:
     css: styles.css
     toc: true
     toc-depth: 3
+    number-sections: false
+    code-tools: false
+    citations-hover: true
+    crossrefs-hover: true
 
 bibliography: references.bib
 csl: apa.csl
