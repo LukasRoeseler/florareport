@@ -59,11 +59,6 @@ report_date <- format(Sys.Date(), "%B %d, %Y")
 n_entries   <- nrow(flora)
 ```
 
-::: {.callout-note appearance="simple"}
-This report is automatically updated daily at 07:00 CEST using the most recent
-version of the FLoRA dataset. Last build: **`r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`**.
-`r if (data_available) paste0("Current snapshot: **", scales::comma(n_entries), " entries**.") else "⚠ Data file not found — plots and tables are skipped in this build."`
-:::
 
 ::: {.flora-box}
 **Keywords:** replication, reproduction, meta-science, open science, FLoRA, FORRT
@@ -85,6 +80,12 @@ and Replication Attempts: Documenting the Reproducibility and Replicability of
 the Sciences and Humanities.* <https://lukasroeseler.github.io/florareport/>
 
 And cite the underlying dataset as @wallrich2026flora.
+:::
+
+::: {.callout-note appearance="simple"}
+This report is automatically updated daily at 07:00 CEST using the most recent
+version of the FLoRA dataset. Last build: **`r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`**.
+`r if (data_available) paste0("Current snapshot: **", scales::comma(n_entries), " entries**.") else "⚠ Data file not found — plots and tables are skipped in this build."`
 :::
 
 <!-- ============================================================= -->
