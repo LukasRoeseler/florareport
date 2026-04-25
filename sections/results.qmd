@@ -1,0 +1,71 @@
+# Results {#sec-results}
+
+Your prose here...
+
+## Overview of the Current Database
+
+```{r}
+#| label: tbl-overview
+#| tbl-cap: "Overview of the current FLoRA snapshot."
+#| eval: !expr data_available
+
+flora_summary <- flora |>
+  summarise(
+    `Total entries`              = n(),
+    `Unique original studies`    = n_distinct(doi_o, na.rm = TRUE),
+    `Unique replication studies`  = n_distinct(doi_r, na.rm = TRUE),
+    Replications                 = sum(type == "replication", na.rm = TRUE),
+    Reproductions                = sum(type == "reproduction", na.rm = TRUE)
+  ) |>
+  pivot_longer(everything(), names_to = "Category", values_to = "Count")
+
+knitr::kable(flora_summary, format = "html")
+```
+
+```{r}
+#| label: tbl-outcomes
+#| tbl-cap: "Replication and reproduction outcomes."
+#| eval: !expr data_available
+
+flora |>
+  filter(!is.na(outcome), !is.na(type)) |>
+  count(type, outcome) |>
+  pivot_wider(names_from = type, values_from = n, values_fill = 0) |>
+  knitr::kable(format = "html")
+```
+
+## Replication Attempts
+
+### Replications Across Disciplines
+
+Your prose...
+
+### Replication Outcomes Over Time
+
+```{r}
+#| label: fig-outcomes-time
+#| fig-cap: "Replication outcomes by publication year of the original study."
+#| eval: !expr data_available
+
+flora |>
+  filter(type == "replication", !is.na(outcome), !is.na(year_o)) |>
+  count(year_o, outcome) |>
+  ggplot(aes(x = year_o, y = n, fill = outcome)) +
+  geom_col() +
+  labs(x = "Original publication year", y = "Number of entries", fill = "Outcome") +
+  theme_minimal()
+```
+
+## Reproduction Attempts
+
+### Computational Success
+
+Your prose...
+
+### Robustness
+
+Your prose...
+
+## Cross-Disciplinary Comparisons
+
+Your prose...

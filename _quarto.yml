@@ -7,8 +7,8 @@ project:
 website:
   description: "The FORRT Library of Reproduction and Replication Attempts"
   favicon: "logo.svg"
-  site-url: "https://your-username.github.io/flora-report"
-  repo-url: "https://github.com/your-username/flora-report"
+  site-url: "https://lukasroeseler.github.io/florareport"
+  repo-url: "https://github.com/lukasroeseler/florareport"
   repo-actions: [issue]
   page-navigation: true
   back-to-top-navigation: false
@@ -21,12 +21,13 @@ website:
     title: false
   page-footer:
     center: |
-      **Recommended citation:** [Author] (`r format(Sys.Date(), '%Y')`).
+      **Recommended citation:** Röseler, L. et al. (`r format(Sys.Date(), '%Y')`).
       *The FORRT Library of Reproduction and Replication Attempts.*
-      [URL]. Data: Wallrich, Röseler et al. (2026), OSF.
+      [lukasroeseler.github.io/florareport](https://lukasroeseler.github.io/florareport/).
+      Data: Wallrich, Röseler et al. (2026), OSF.
       [doi.org/10.17605/OSF.IO/9R62X](https://doi.org/10.17605/OSF.IO/9R62X)
     left: |
-      Built with [Quarto](https://quarto.org/). Data licensed CC BY 4.0.
+      Built with [Quarto](https://quarto.org/). CC BY 4.0.
     right: |
       [FORRT Replication Hub](https://forrt.org/replications/)
 

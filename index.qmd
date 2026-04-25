@@ -1,10 +1,10 @@
 ---
 title: "The FORRT Library of Reproduction and Replication Attempts: Documenting the Reproducibility and Replicability of the Sciences and Humanities"
 author:
-  - name: "Author Name"
-    orcid: "0000-0000-0000-0000"
+  - name: "Lukas Röseler"
+    orcid: "0000-0002-6446-1901"
     affiliations:
-      - name: "Affiliation"
+      - name: "Münster Center for Open Science, University of Münster"
 format:
   html:
     toc: true
@@ -27,9 +27,7 @@ link-citations: true
 nocite: |
   @wallrich2026flora, @roseler2024replication, @roseler2025r2editorial
 abstract: |
-  *To be written.* This abstract will summarize the report's aims, methods, key
-  findings, and contributions to open science. (Canonical version in
-  sections/abstract.md — copy here after editing.)
+  In the sciences and humanities, repeatability of studies via reproduction (retesting with the same data) or replication (retesting with new data) is critical for affirming the correctness and generalizability of findings. While the rate of replications has strongly increased over the last decade, individual replications have been difficult to find due to them being buried in large-scale projects, published in journals other than those that published the original finding, or only published on preprint servers. To support identification of replications, we present the FORRT Library of Reproduction and Replication Attempts, a successor to the Replication Database (Röseler et al., 2024) that currently includes over 2,000 pairs of original and replication studies. We present our methods that led us to the current version,help us achieve our goal of a comprehensive database, share exploratory results, provide brief tutorials on tools that help researchers keep track of replications, and suggest ways for researchers to contribute studies. 
 execute:
   echo: false
   warning: false
@@ -82,9 +80,9 @@ version of the FLoRA dataset. Last build: **`r format(Sys.time(), "%Y-%m-%d %H:%
 
 Please cite this report as:
 
-[Author]. (`r format(Sys.Date(), "%Y")`). *The FORRT Library of Reproduction
+Röseler, L. (`r format(Sys.Date(), "%Y")`). *The FORRT Library of Reproduction
 and Replication Attempts: Documenting the Reproducibility and Replicability of
-the Sciences and Humanities.* [URL]
+the Sciences and Humanities.* <https://lukasroeseler.github.io/florareport/>
 
 And cite the underlying dataset as @wallrich2026flora.
 :::
@@ -97,68 +95,7 @@ And cite the underlying dataset as @wallrich2026flora.
 
 {{< include sections/methods.md >}}
 
-<!-- Results: prose comes from the include, R chunks live here -->
-
-# Results {#sec-results}
-
-*To be written.* Descriptive statistics and visualisations of the current FLoRA
-snapshot.
-
-## Overview of the Current Database
-
-```{r}
-#| label: tbl-overview
-#| tbl-cap: "Overview of the current FLoRA snapshot."
-#| eval: !expr data_available
-
-flora_summary <- flora |>
-  summarise(
-    `Total entries`              = n(),
-    `Unique original studies`    = n_distinct(doi_o, na.rm = TRUE),
-    `Unique replication studies`  = n_distinct(doi_r, na.rm = TRUE),
-    Replications                 = sum(type == "replication", na.rm = TRUE),
-    Reproductions                = sum(type == "reproduction", na.rm = TRUE)
-  ) |>
-  pivot_longer(everything(), names_to = "Category", values_to = "Count")
-
-knitr::kable(flora_summary, format = "html")
-```
-
-## Replication Attempts
-
-### Replications Across Disciplines
-
-*To be written.*
-
-### Replication Outcomes Over Time
-
-```{r}
-#| label: fig-outcomes-time
-#| fig-cap: "Replication outcomes by publication year of the original study."
-#| eval: !expr data_available
-
-flora |>
-  filter(type == "replication", !is.na(outcome), !is.na(year_o)) |>
-  count(year_o, outcome) |>
-  ggplot(aes(x = year_o, y = n, fill = outcome)) +
-  geom_col() +
-  labs(x = "Original publication year", y = "Number of entries", fill = "Outcome") +
-  theme_minimal()
-```
-
-## Reproduction Attempts
-
-### Computational Success
-
-*To be written.*
-
-### Robustness
-
-*To be written.*
-
-## Cross-Disciplinary Comparisons
-
-*To be written.*
+{{< include sections/results.qmd >}}
 
 {{< include sections/discussion.md >}}
 

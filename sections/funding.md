@@ -2,4 +2,6 @@
 
 # Funding {#sec-funding .unnumbered}
 
-*To be written.*
+- JOPD paper funders
+- MüCOS (Sophie Schüller)
+- UKRI (Lukas Wallrich & Lukas Röseler)

@@ -57,14 +57,20 @@ a:hover {
   border-bottom-style: solid;
 }
 
-/* ---------- Navbar purple accent ---------- */
+/* ---------- Navbar ---------- */
 .navbar {
   border-bottom: 3px solid var(--flora-purple-dark) !important;
 }
+/* Remove ALL underlines from navbar links and logo */
+.navbar a,
+.navbar a:visited,
+.navbar a:hover,
 .navbar .navbar-brand,
 .navbar .navbar-brand a,
 .navbar .navbar-brand img,
-.navbar a.navbar-brand {
+.navbar a.navbar-brand,
+.navbar .nav-link,
+.navbar .nav-link:hover {
   border-bottom: none !important;
   text-decoration: none !important;
 }
@@ -73,10 +79,15 @@ a:hover {
   width: auto;
 }
 
-/* Hide the "Published" / date metadata from the title block */
+/* ---------- Hide the AUTHOR / AFFILIATION / PUBLISHED metadata block --- */
+/* This is the empty box that appears below the title.                     */
+/* Multiple selectors to catch all Quarto versions.                        */
+.quarto-title-meta,
+div.quarto-title-meta,
+#title-block-header .quarto-title-meta,
 .quarto-title-meta-heading,
 .quarto-title-meta-contents,
-div.quarto-title-meta {
+#title-block-header > .quarto-title-meta {
   display: none !important;
 }
 
@@ -93,9 +104,7 @@ div.abstract,
   border-radius: 0 6px 6px 0;
 }
 
-/* Keywords box — styled via .flora-box in the body */
-
-/* Custom boxes for lay summary and citation — use flora-box class */
+/* Custom boxes for lay summary, citation, keywords — use flora-box class */
 .flora-box {
   background: var(--flora-purple-bg);
   border-left: 4px solid var(--flora-purple-dark);
@@ -153,7 +162,6 @@ div.abstract,
 }
 
 /* ---------- Citation hover popups (Quarto citations-hover) ---------- */
-/* Style the built-in Quarto citation popup to match theme */
 .citation-popup,
 .quarto-citation-popup,
 div[id^="ref-popup-"] {
