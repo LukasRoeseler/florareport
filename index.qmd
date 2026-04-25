@@ -5,8 +5,6 @@ author:
     orcid: "0000-0000-0000-0000"
     affiliations:
       - name: "Affiliation"
-date: today
-date-format: "YYYY-MM-DD"
 format:
   html:
     toc: true

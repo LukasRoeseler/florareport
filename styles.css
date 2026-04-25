@@ -61,9 +61,23 @@ a:hover {
 .navbar {
   border-bottom: 3px solid var(--flora-purple-dark) !important;
 }
+.navbar .navbar-brand,
+.navbar .navbar-brand a,
+.navbar .navbar-brand img,
+.navbar a.navbar-brand {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
 .navbar .navbar-brand img {
   height: 36px;
   width: auto;
+}
+
+/* Hide the "Published" / date metadata from the title block */
+.quarto-title-meta-heading,
+.quarto-title-meta-contents,
+div.quarto-title-meta {
+  display: none !important;
 }
 
 /* ---------- Styled boxes: abstract, keywords, lay summary, citation ---- */
@@ -79,19 +93,7 @@ div.abstract,
   border-radius: 0 6px 6px 0;
 }
 
-/* Keywords box — match abstract style */
-.quarto-title-meta-heading,
-.quarto-title-meta-contents {
-  font-family: inherit;
-}
-div.quarto-title-meta {
-  background: var(--flora-purple-bg);
-  border-left: 4px solid var(--flora-purple-dark);
-  padding: 0.8rem 1.2rem;
-  margin: 0 0 1rem 0;
-  border-radius: 0 6px 6px 0;
-  font-size: 0.95rem;
-}
+/* Keywords box — styled via .flora-box in the body */
 
 /* Custom boxes for lay summary and citation — use flora-box class */
 .flora-box {
