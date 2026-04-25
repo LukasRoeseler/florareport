@@ -23,22 +23,14 @@ format:
     citations-hover: true
     crossrefs-hover: true
     link-external-newwindow: true
-  pdf:
-    documentclass: article
-    papersize: a4
-    fontsize: 11pt
-    geometry:
-      - margin=1in
-    toc: true
-    number-sections: true
-    fig-cap-location: bottom
-    tbl-cap-location: top
 bibliography: references.bib
 csl: apa.csl
 link-citations: true
+nocite: |
+  @wallrich2026flora, @roseler2024replication, @roseler2025r2editorial
 abstract: |
-  *To be written.* This is the abstract section that will summarize the report's
-  aims, methods, key findings, and contributions to open science.
+  *To be written.* This abstract will summarize the report's aims, methods, key
+  findings, and contributions to open science.
 keywords:
   - replication
   - reproduction
@@ -56,140 +48,178 @@ execute:
 ```{r setup}
 #| include: false
 
-# Packages
 library(tidyverse)
 library(knitr)
-library(kableExtra)
 library(here)
 
-# Load the most recent FLoRA data
-flora <- readr::read_csv(here::here("data", "flora.csv"), show_col_types = FALSE)
+# ---------- Load FLoRA data (fail gracefully) ----------
+flora_path <- here::here("data", "flora.csv")
 
-# Date stamp for the report
+if (file.exists(flora_path)) {
+  flora <- readr::read_csv(flora_path, show_col_types = FALSE, na = c("", "NA"))
+  data_available <- TRUE
+} else {
+  flora <- tibble()
+  data_available <- FALSE
+}
+
 report_date <- format(Sys.Date(), "%B %d, %Y")
+n_entries   <- nrow(flora)
 ```
 
 ::: {.callout-note appearance="simple"}
-This report is automatically updated daily at 07:00 CEST using the most recent version of the FLoRA dataset. Last build: `r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`.
+This report is automatically updated daily at 07:00 CEST using the most recent version of the FLoRA dataset. Last build: **`r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`**. `r if (data_available) paste0("Current snapshot: **", scales::comma(n_entries), " entries**.") else "⚠ Data file not found — plots and tables are skipped in this build."`
 :::
 
 # Lay Summary {#sec-lay-summary .unnumbered}
 
-```{=html}
-<!-- A plain-language summary written for a general audience, ~150-250 words.
-     Avoid jargon. Explain what FLoRA is, why it matters, and what this report
-     contributes. -->
-```
+*To be written.* A plain-language summary (\~150–250 words) explaining what FLoRA is, why it matters, and what this report contributes.
 
 # Citation {#sec-citation .unnumbered}
 
-<!-- Recommended citation for this report. Include version/date and DOI when available. -->
+Please cite this report as:
+
+> \[Author\]. (`r format(Sys.Date(), "%Y")`). *The FORRT Library of Reproduction and Replication Attempts: Documenting the Reproducibility and Replicability of the Sciences and Humanities.* \[URL\]
+
+And cite the underlying dataset as @wallrich2026flora.
 
 # Theory {#sec-theory}
 
-```{=html}
-<!-- Background and conceptual framing.
-     - The replication and reproduction crises across disciplines
-     - Why a comprehensive library matters
-     - Distinction between replication and reproduction (per FLoRA definitions)
-     - Relationship to FReD and prior tracking efforts
-     - Theoretical contribution of meta-scientific tracking -->
-```
+*To be written.* Background and conceptual framing covering the replication and reproduction crises, why a comprehensive library matters, and the relationship between FLoRA and previous tracking efforts such as FReD [@roseler2024replication].
 
 ## The Replication and Reproduction Crises
 
+*To be written.* Overview of the replication crisis in psychology [@osc2015reproducibility; @camerer2016economics] and the broader credibility revolution [@vazire2018credibility; @korbmacher2023replication].
+
 ## From FReD to FLoRA
+
+*To be written.* How the FORRT Replication Database (FReD) evolved into FLoRA, expanding scope beyond psychology and adding reproductions as a tracked category.
 
 ## Defining Replications and Reproductions
 
+*To be written.* Definitions following @parsons2022glossary and the FLoRA inclusion criteria: replications collect new data; reproductions re-analyse the original data.
+
 # Methods {#sec-methods}
 
-<!-- How the FLoRA dataset is constructed and how this report processes it. -->
+*To be written.* How the FLoRA dataset is constructed and how this report processes it.
 
 ## Inclusion Criteria
+
+*To be written.* Studies must self-identify as a replication or reproduction, identify a specific target study, and replicate a study or experiment (not just a single association).
 
 ## Coding of Outcomes
 
 ### Replication Outcomes
 
+*To be written.* Outcomes are coded as **Successful**, **Failed**, or **Mixed** based on how the replication authors characterise their results.
+
 ### Reproduction Outcomes
+
+*To be written.* Reproductions are coded along two dimensions: computational success (Computationally Successful vs. Computational Issues) and robustness (Robust, Robustness Challenges, or Robustness Not Checked).
 
 ## Data Sources and Contributions
 
+*To be written.* Description of how entries enter FLoRA — community submissions, large-scale projects, systematic searches.
+
 ## Data Pipeline for This Report
 
-```{=html}
-<!-- Describe the GitHub Actions workflow, the daily refresh, the source CSV,
-     and the reproducibility of this report. -->
-```
+*To be written.* This report is rendered via a GitHub Actions workflow that downloads the latest `flora.csv` from the [FReD-data repository](https://github.com/forrtproject/FReD-data) daily at 07:00 CEST and rebuilds this page. All code is open and reproducible.
 
 # Results {#sec-results}
 
-<!-- Descriptive statistics and visualisations of the current FLoRA snapshot. -->
+*To be written.* Descriptive statistics and visualisations of the current FLoRA snapshot.
 
 ## Overview of the Current Database
 
-```{r overview-table}
+```{r}
 #| label: tbl-overview
 #| tbl-cap: "Overview of the current FLoRA snapshot."
-#| eval: false
+#| eval: !expr data_available
 
-# Placeholder summary table
+flora_summary <- flora |>
+  summarise(
+    `Total entries`              = n(),
+    `Unique original studies`    = n_distinct(doi_o, na.rm = TRUE),
+    `Unique replication studies`  = n_distinct(doi_r, na.rm = TRUE),
+    Replications                 = sum(type == "replication", na.rm = TRUE),
+    Reproductions                = sum(type == "reproduction", na.rm = TRUE)
+  ) |>
+  pivot_longer(everything(), names_to = "Category", values_to = "Count")
+
+knitr::kable(flora_summary, format = "html")
 ```
 
 ## Replication Attempts
 
 ### Replications Across Disciplines
 
+*To be written.*
+
 ### Replication Outcomes Over Time
+
+```{r}
+#| label: fig-outcomes-time
+#| fig-cap: "Replication outcomes by publication year of the original study."
+#| eval: !expr data_available
+
+flora |>
+  filter(type == "replication", !is.na(outcome), !is.na(year_o)) |>
+  count(year_o, outcome) |>
+  ggplot(aes(x = year_o, y = n, fill = outcome)) +
+  geom_col() +
+  labs(x = "Original publication year", y = "Number of entries", fill = "Outcome") +
+  theme_minimal()
+```
 
 ## Reproduction Attempts
 
 ### Computational Success
 
+*To be written.*
+
 ### Robustness
+
+*To be written.*
 
 ## Cross-Disciplinary Comparisons
 
+*To be written.*
+
 # Discussion {#sec-discussion}
 
-<!-- Interpretation of the findings and their implications. -->
+*To be written.* Interpretation of the descriptive findings and their implications.
 
 ## Patterns in Replicability
 
+*To be written.*
+
 ## Patterns in Reproducibility
+
+*To be written.*
 
 ## Implications for Researchers, Educators, and Policy
 
+*To be written.*
+
 # Limitations {#sec-limitations}
 
-```{=html}
-<!-- Honest treatment of caveats:
-     - Crowdsourced data quality
-     - Coverage biases across disciplines
-     - Definitional ambiguity in replication closeness
-     - Self-identification requirement
-     - No statistical effect sizes (in contrast to FReD) -->
-```
+*To be written.* Honest treatment of caveats, including crowdsourced data quality, coverage biases across disciplines, the self-identification requirement, and the absence of statistical effect sizes (in contrast to FReD).
 
 # Conclusion {#sec-conclusion}
 
-<!-- A concise wrap-up: what FLoRA contributes, where it's heading, how to engage. -->
+*To be written.* A concise wrap-up: what FLoRA contributes, where the project is heading, and how to engage.
 
 # Social Responsibility {#sec-social-responsibility .unnumbered}
 
-```{=html}
-<!-- Statement on the open, community-driven, equitable nature of FLoRA.
-     Inclusivity, accessibility, contribution pathways, recognition of contributors. -->
-```
+*To be written.* Statement on the open, community-driven, equitable nature of FLoRA.
 
 # Acknowledgments {#sec-acknowledgments .unnumbered}
 
-<!-- Thank contributors, FORRT community, and supporting institutions. -->
+*To be written.* Thanks to the FLoRA contributors, FORRT community, and supporting institutions.
 
 # Funding {#sec-funding .unnumbered}
 
-<!-- Funding statement. -->
+*To be written.*
 
 # References {#sec-references .unnumbered}
 

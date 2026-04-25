@@ -89,6 +89,15 @@ jobs:
           echo "Downloaded $(wc -l < data/flora.csv) lines."
           head -1 data/flora.csv
 
+      - name: Download APA 7 CSL (if not committed)
+        run: |
+          if [ ! -f apa.csl ]; then
+            echo "Downloading APA 7 CSL..."
+            curl -L --fail --retry 3 \
+              -o apa.csl \
+              https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
+          fi
+
       - name: Render Quarto report
         run: quarto render
 
