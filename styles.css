@@ -1,0 +1,119 @@
+/* =========================================================================
+   FLoRA report — light styling inspired by Replication Research (R2).
+   Keep it readable, scholarly, and APA-friendly.
+   ========================================================================= */
+
+:root {
+  --r2-primary: #0b3a5b;
+  --r2-accent: #c64b3f;
+  --r2-muted: #5b6770;
+  --r2-rule: #d8dde2;
+  --r2-callout-bg: #eef3f7;
+  --body-max-width: 780px;
+}
+
+body {
+  font-family: "Charter", "Source Serif Pro", Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #1c1c1c;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Source Sans Pro", -apple-system, "Segoe UI", sans-serif;
+  color: var(--r2-primary);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h1.title {
+  font-size: 1.9rem;
+  line-height: 1.25;
+  border-bottom: 3px solid var(--r2-primary);
+  padding-bottom: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+h2 {
+  margin-top: 2.4rem;
+  border-bottom: 1px solid var(--r2-rule);
+  padding-bottom: 0.25rem;
+}
+
+h3 { margin-top: 1.8rem; }
+
+a, a:visited {
+  color: var(--r2-accent);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--r2-accent);
+}
+a:hover { border-bottom-style: solid; }
+
+/* Abstract block — emulates the boxed abstract in the R2 template */
+#abstract,
+.abstract,
+div.abstract {
+  background: var(--r2-callout-bg);
+  border-left: 4px solid var(--r2-primary);
+  padding: 1rem 1.2rem;
+  margin: 1.5rem 0 2rem 0;
+  font-size: 0.97rem;
+}
+
+/* Keywords */
+.keywords {
+  font-size: 0.92rem;
+  color: var(--r2-muted);
+  font-style: italic;
+}
+
+/* References — hanging indent in APA style */
+#refs > div, .csl-entry {
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* Tables */
+table.table {
+  font-size: 0.94rem;
+}
+table caption {
+  caption-side: top;
+  font-weight: 600;
+  color: var(--r2-primary);
+}
+
+/* Figures */
+figure.quarto-float-fig img {
+  max-width: 100%;
+  height: auto;
+}
+figcaption {
+  font-size: 0.9rem;
+  color: var(--r2-muted);
+}
+
+/* Code blocks */
+pre, code {
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.88rem;
+}
+pre {
+  background: #f6f8fa;
+  border: 1px solid var(--r2-rule);
+  border-radius: 4px;
+  padding: 0.8rem 1rem;
+}
+
+/* Callouts */
+.callout-note {
+  border-left-color: var(--r2-primary) !important;
+}
+
+/* Print / PDF tweaks */
+@media print {
+  a { color: black; border-bottom: none; }
+  h1, h2, h3 { break-after: avoid; }
+}

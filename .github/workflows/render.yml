@@ -1,0 +1,109 @@
+name: Render and deploy FLoRA report
+
+on:
+  # Daily at 07:00 CEST.
+  # CEST = UTC+2 (summer), CET = UTC+1 (winter).
+  # Cron uses UTC. We schedule both 05:00 UTC (CEST) and 06:00 UTC (CET)
+  # so the build runs at 07:00 local Berlin time year-round.
+  schedule:
+    - cron: "0 5 * * *"   # 07:00 CEST (Mar–Oct)
+    - cron: "0 6 * * *"   # 07:00 CET  (Oct–Mar)
+
+  # Rebuild whenever any source file changes on the default branch.
+  push:
+    branches: [main]
+    paths:
+      - "index.qmd"
+      - "references.bib"
+      - "_quarto.yml"
+      - "styles.css"
+      - "apa.csl"
+      - "data/**"
+      - "figures/**"
+      - "scripts/**"
+      - ".github/workflows/**"
+
+  # Allow manual runs from the Actions tab.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      RENV_PATHS_ROOT: ~/.cache/R/renv
+      # URL of the canonical FLoRA CSV. Override via repo variable FLORA_CSV_URL.
+      FLORA_CSV_URL: ${{ vars.FLORA_CSV_URL || 'https://raw.githubusercontent.com/forrtproject/FReD-data/refs/heads/main/output/flora.csv' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: "1.5.57"
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "4.4.1"
+          use-public-rspm: true
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
+            libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev \
+            libpng-dev libtiff5-dev libjpeg-dev pandoc
+
+      - name: Install R packages
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::tidyverse
+            any::knitr
+            any::rmarkdown
+            any::kableExtra
+            any::here
+            any::janitor
+            any::scales
+            any::ggplot2
+            any::readr
+
+      - name: Download latest FLoRA dataset
+        run: |
+          mkdir -p data
+          echo "Fetching FLoRA CSV from: $FLORA_CSV_URL"
+          curl -L --fail --retry 3 --retry-delay 5 \
+               -o data/flora.csv "$FLORA_CSV_URL"
+          echo "Downloaded $(wc -l < data/flora.csv) lines."
+          head -1 data/flora.csv
+
+      - name: Render Quarto report
+        run: quarto render
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

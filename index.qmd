@@ -1,0 +1,197 @@
+---
+title: "The FORRT Library of Reproduction and Replication Attempts: Documenting the Reproducibility and Replicability of the Sciences and Humanities"
+author:
+  - name: "Author Name"
+    orcid: "0000-0000-0000-0000"
+    affiliations:
+      - name: "Affiliation"
+date: today
+date-format: "YYYY-MM-DD"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    number-sections: true
+    theme: cosmo
+    css: styles.css
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    code-fold: true
+    code-tools: true
+    embed-resources: false
+    citations-hover: true
+    crossrefs-hover: true
+    link-external-newwindow: true
+  pdf:
+    documentclass: article
+    papersize: a4
+    fontsize: 11pt
+    geometry:
+      - margin=1in
+    toc: true
+    number-sections: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+bibliography: references.bib
+csl: apa.csl
+link-citations: true
+abstract: |
+  *To be written.* This is the abstract section that will summarize the report's
+  aims, methods, key findings, and contributions to open science.
+keywords:
+  - replication
+  - reproduction
+  - meta-science
+  - open science
+  - FLoRA
+  - FORRT
+execute:
+  echo: false
+  warning: false
+  message: false
+  cache: false
+---
+
+```{r setup}
+#| include: false
+
+# Packages
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(here)
+
+# Load the most recent FLoRA data
+flora <- readr::read_csv(here::here("data", "flora.csv"), show_col_types = FALSE)
+
+# Date stamp for the report
+report_date <- format(Sys.Date(), "%B %d, %Y")
+```
+
+::: {.callout-note appearance="simple"}
+This report is automatically updated daily at 07:00 CEST using the most recent version of the FLoRA dataset. Last build: `r format(Sys.time(), "%Y-%m-%d %H:%M %Z")`.
+:::
+
+# Lay Summary {#sec-lay-summary .unnumbered}
+
+```{=html}
+<!-- A plain-language summary written for a general audience, ~150-250 words.
+     Avoid jargon. Explain what FLoRA is, why it matters, and what this report
+     contributes. -->
+```
+
+# Citation {#sec-citation .unnumbered}
+
+<!-- Recommended citation for this report. Include version/date and DOI when available. -->
+
+# Theory {#sec-theory}
+
+```{=html}
+<!-- Background and conceptual framing.
+     - The replication and reproduction crises across disciplines
+     - Why a comprehensive library matters
+     - Distinction between replication and reproduction (per FLoRA definitions)
+     - Relationship to FReD and prior tracking efforts
+     - Theoretical contribution of meta-scientific tracking -->
+```
+
+## The Replication and Reproduction Crises
+
+## From FReD to FLoRA
+
+## Defining Replications and Reproductions
+
+# Methods {#sec-methods}
+
+<!-- How the FLoRA dataset is constructed and how this report processes it. -->
+
+## Inclusion Criteria
+
+## Coding of Outcomes
+
+### Replication Outcomes
+
+### Reproduction Outcomes
+
+## Data Sources and Contributions
+
+## Data Pipeline for This Report
+
+```{=html}
+<!-- Describe the GitHub Actions workflow, the daily refresh, the source CSV,
+     and the reproducibility of this report. -->
+```
+
+# Results {#sec-results}
+
+<!-- Descriptive statistics and visualisations of the current FLoRA snapshot. -->
+
+## Overview of the Current Database
+
+```{r overview-table}
+#| label: tbl-overview
+#| tbl-cap: "Overview of the current FLoRA snapshot."
+#| eval: false
+
+# Placeholder summary table
+```
+
+## Replication Attempts
+
+### Replications Across Disciplines
+
+### Replication Outcomes Over Time
+
+## Reproduction Attempts
+
+### Computational Success
+
+### Robustness
+
+## Cross-Disciplinary Comparisons
+
+# Discussion {#sec-discussion}
+
+<!-- Interpretation of the findings and their implications. -->
+
+## Patterns in Replicability
+
+## Patterns in Reproducibility
+
+## Implications for Researchers, Educators, and Policy
+
+# Limitations {#sec-limitations}
+
+```{=html}
+<!-- Honest treatment of caveats:
+     - Crowdsourced data quality
+     - Coverage biases across disciplines
+     - Definitional ambiguity in replication closeness
+     - Self-identification requirement
+     - No statistical effect sizes (in contrast to FReD) -->
+```
+
+# Conclusion {#sec-conclusion}
+
+<!-- A concise wrap-up: what FLoRA contributes, where it's heading, how to engage. -->
+
+# Social Responsibility {#sec-social-responsibility .unnumbered}
+
+```{=html}
+<!-- Statement on the open, community-driven, equitable nature of FLoRA.
+     Inclusivity, accessibility, contribution pathways, recognition of contributors. -->
+```
+
+# Acknowledgments {#sec-acknowledgments .unnumbered}
+
+<!-- Thank contributors, FORRT community, and supporting institutions. -->
+
+# Funding {#sec-funding .unnumbered}
+
+<!-- Funding statement. -->
+
+# References {#sec-references .unnumbered}
+
+::: {#refs}
+:::

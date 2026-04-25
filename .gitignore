@@ -1,0 +1,32 @@
+# Quarto build artefacts
+/.quarto/
+/_site/
+/_freeze/
+/_book/
+*.html
+!index.html.template
+
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+renv/library/
+renv/local/
+renv/cellar/
+renv/lock/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Data refreshed at build time — ignore the local copy so contributors don't
+# accidentally commit a stale dataset. Remove this line if you want to commit
+# a frozen snapshot.
+data/flora.csv
