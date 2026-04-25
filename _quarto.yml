@@ -6,7 +6,7 @@ project:
 
 website:
   description: "The FORRT Library of Reproduction and Replication Attempts"
-  favicon: "https://raw.githubusercontent.com/forrtproject/flora-explorer/refs/heads/main/logo.svg"
+  favicon: "logo.svg"
   site-url: "https://your-username.github.io/flora-report"
   repo-url: "https://github.com/your-username/flora-report"
   repo-actions: [issue]
@@ -15,7 +15,7 @@ website:
   navbar:
     background: light
     search: true
-    logo: "https://raw.githubusercontent.com/forrtproject/flora-explorer/refs/heads/main/logo.svg"
+    logo: "logo.svg"
     logo-alt: "FLoRA logo"
     logo-href: "index.html"
     title: false

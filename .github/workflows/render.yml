@@ -99,6 +99,15 @@ jobs:
               https://raw.githubusercontent.com/citation-style-language/styles/master/apa.csl
           fi
 
+      - name: Download FLoRA logo (if not committed)
+        run: |
+          if [ ! -f logo.svg ]; then
+            echo "Downloading FLoRA logo..."
+            curl -L --fail --retry 3 \
+              -o logo.svg \
+              https://raw.githubusercontent.com/forrtproject/flora-explorer/refs/heads/main/logo.svg
+          fi
+
       - name: Render Quarto report
         run: quarto render
 
