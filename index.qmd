@@ -21,6 +21,12 @@ format:
     citations-hover: true
     crossrefs-hover: true
     link-external-newwindow: true
+  typst:
+    output-file: "FLoRA-report"
+    toc: false
+    papersize: a4
+    fig-cap-location: bottom
+    tbl-cap-location: top
 bibliography: references.bib
 csl: apa.csl
 link-citations: true
@@ -35,8 +41,25 @@ execute:
   cache: false
 ---
 
-<!-- WIP ribbon -->
+::: {.content-visible when-format="html"}
 <div class="wip-ribbon"><span>Work in Progress</span></div>
+:::
+
+```{r}
+#| label: render-date
+#| include: false
+render_date <- format(Sys.Date(), "%d %B %Y")
+```
+
+::: {.content-visible when-format="html"}
+**Snapshot rendered on `r render_date`.**
+[📄 Download as PDF](FLoRA-report.pdf){.flora-pdf-btn}
+:::
+
+::: {.content-visible when-format="typst"}
+*This PDF was generated on `r render_date` from the live FLoRA snapshot.*
+:::
+
 
 ```{r setup}
 #| include: false

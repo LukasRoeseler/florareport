@@ -242,3 +242,23 @@ button.code-tools-button,
   a { color: black; border-bottom: none; }
   h1, h2, h3 { break-after: avoid; }
 }
+
+
+.flora-pdf-btn {
+  display: inline-block;
+  padding: 0.25em 0.7em;
+  margin-left: 0.4em;
+  font-size: 0.9em;
+  color: #4B2E83;                /* your purple */
+  background-color: transparent;
+  border: 1px solid #4B2E83;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.flora-pdf-btn:hover {
+  background-color: #4B2E83;
+  color: #fff;
+  text-decoration: none;
+}
