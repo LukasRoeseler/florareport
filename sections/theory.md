@@ -5,22 +5,20 @@
 
 # Theory {#sec-theory}
 
-*To be written.* Background and conceptual framing covering the replication and
-reproduction crises, why a comprehensive library matters, and the relationship
-between FLoRA and previous tracking efforts such as FReD
+- Background and conceptual framing covering the replication and
+reproduction crises, 
+- why a comprehensive library matters, 
+- relationship between FLoRA and previous tracking efforts such as FReD
 [@roseler2024replication].
 
 ## The Replication and Reproduction Crises
 
-*To be written.* Overview of the replication crisis in psychology
-[@osc2015reproducibility; @camerer2016economics] and the broader credibility
-revolution [@vazire2018credibility; @korbmacher2023replication].
+- Overview of the replication crisis in psychology [@osc2015reproducibility; @camerer2016economics] and the broader credibility revolution [@vazire2018credibility; @korbmacher2023replication].
 
 ## Defining Replications and Reproductions
 
-*To be written.* Definitions following @parsons2022glossary and the FLoRA
-inclusion criteria: replications collect new data; reproductions re-analyse the
-original data.
+- Definitions following @parsons2022glossary 
+- FLoRA inclusion criteria: replications collect new data; reproductions re-analyse the original data.
 
 ## Tracking Replications
 

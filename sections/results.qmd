@@ -1,8 +1,11 @@
 # Results {#sec-results}
 
-Your prose here...
+
 
 ## Overview of the Current Database
+
+- number of entries overall, by type, by outcome
+- date of current snapshot
 
 ```{r}
 #| label: tbl-overview
@@ -34,11 +37,24 @@ flora |>
   knitr::kable(format = "html")
 ```
 
+
+
+## Reproduction Attempts
+
+### Computational Success
+- overview
+
+### Robustness
+
+
+## Cross-Disciplinary Comparisons
+
+
+
 ## Replication Attempts
 
 ### Replications Across Disciplines
 
-Your prose...
 
 ### Replication Outcomes Over Time
 
@@ -55,17 +71,3 @@ flora |>
   labs(x = "Original publication year", y = "Number of entries", fill = "Outcome") +
   theme_minimal()
 ```
-
-## Reproduction Attempts
-
-### Computational Success
-
-Your prose...
-
-### Robustness
-
-Your prose...
-
-## Cross-Disciplinary Comparisons
-
-Your prose...
