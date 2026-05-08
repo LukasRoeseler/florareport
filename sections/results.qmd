@@ -49,7 +49,6 @@ prep_outcomes <- function(df) {
 
 ## Overview of the Current Database
 
-- Briefly introduce FLoRA in one or two sentences (purpose, scope, sources: FReD + OpenAlex search + Replication Network + I4R reports).
 - State the date of the current snapshot (consider pulling this dynamically from the data file timestamp, e.g., `format(file.info("data/flora.csv")$mtime, "%B %Y")`).
 - Walk the reader through @tbl-overview: total number of entries, share of replications vs. reproductions, ratio of unique original to unique replication studies (i.e., how often the same original study has been replicated multiple times).
 - Note any caveats about coverage (e.g., the database is non-exhaustive, English-language bias, dependence on self-identification as a replication).
