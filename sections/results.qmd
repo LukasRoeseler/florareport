@@ -1,11 +1,58 @@
 # Results {#sec-results}
 
+```{r}
+#| label: setup-results
+#| include: false
+#| eval: !expr data_available
 
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(scales)
+
+# Helper: render interactively in HTML (mouse-over only, no toolbar),
+# statically otherwise
+render_plot <- function(p, tooltip = "text") {
+  if (knitr::is_html_output() && requireNamespace("plotly", quietly = TRUE)) {
+    plotly::ggplotly(p, tooltip = tooltip) |>
+      plotly::config(
+        displayModeBar = FALSE,
+        displaylogo    = FALSE,
+        showTips       = FALSE
+      ) |>
+      plotly::layout(hoverlabel = list(bgcolor = "white"))
+  } else {
+    p
+  }
+}
+
+# Consistent outcome ordering and colors
+outcome_levels <- c("successful", "mixed", "failed", "inconclusive")
+outcome_labels <- c("Successful", "Mixed", "Failed", "Inconclusive")
+outcome_colors <- c(
+  "Successful"   = "#4CB07A",
+  "Mixed"        = "#E6A24C",
+  "Failed"       = "#E2473B",
+  "Inconclusive" = "#5A6B7B"
+)
+
+prep_outcomes <- function(df) {
+  df |>
+    filter(!is.na(outcome)) |>
+    mutate(outcome = factor(
+      tools::toTitleCase(tolower(outcome)),
+      levels = outcome_labels
+    )) |>
+    filter(!is.na(outcome))
+}
+```
 
 ## Overview of the Current Database
 
-- number of entries overall, by type, by outcome
-- date of current snapshot
+- Briefly introduce FLoRA in one or two sentences (purpose, scope, sources: FReD + OpenAlex search + Replication Network + I4R reports).
+- State the date of the current snapshot (consider pulling this dynamically from the data file timestamp, e.g., `format(file.info("data/flora.csv")$mtime, "%B %Y")`).
+- Walk the reader through @tbl-overview: total number of entries, share of replications vs. reproductions, ratio of unique original to unique replication studies (i.e., how often the same original study has been replicated multiple times).
+- Note any caveats about coverage (e.g., the database is non-exhaustive, English-language bias, dependence on self-identification as a replication).
 
 ```{r}
 #| label: tbl-overview
@@ -16,7 +63,7 @@ flora_summary <- flora |>
   summarise(
     `Total entries`              = n(),
     `Unique original studies`    = n_distinct(doi_o, na.rm = TRUE),
-    `Unique replication studies`  = n_distinct(doi_r, na.rm = TRUE),
+    `Unique replication studies` = n_distinct(doi_r, na.rm = TRUE),
     Replications                 = sum(type == "replication", na.rm = TRUE),
     Reproductions                = sum(type == "reproduction", na.rm = TRUE)
   ) |>
@@ -25,49 +72,347 @@ flora_summary <- flora |>
 knitr::kable(flora_summary, format = "html")
 ```
 
+## Reproduction Attempts
+
+- Define what is meant by *reproduction* in FLoRA (re-running analyses on the same data, distinguishing computational reproducibility from robustness).
+- Mention the main sources of reproductions (Replication Network list, Institute for Replication reports).
+- Flag that, unlike replications, reproductions test the same data and so any failure points more directly to coding/analytic issues.
+
+### Outcomes
+
+- Summarise @tbl-outcomes-reproduction in prose: total number of reproductions, share that were successful, share that failed, share that were mixed/inconclusive.
+- Refer the reader to @fig-outcome-distribution-reproduction for a visual overview.
+- Consider commenting on the (probable) low share of "inconclusive" outcomes and what that means in practice.
+
 ```{r}
-#| label: tbl-outcomes
-#| tbl-cap: "Replication and reproduction outcomes."
+#| label: tbl-outcomes-reproduction
+#| tbl-cap: "Reproduction outcomes."
 #| eval: !expr data_available
 
 flora |>
-  filter(!is.na(outcome), !is.na(type)) |>
-  count(type, outcome) |>
-  pivot_wider(names_from = type, values_from = n, values_fill = 0) |>
+  filter(type == "reproduction", !is.na(outcome)) |>
+  count(outcome, name = "Frequency") |>
+  filter(Frequency > 0) |>
+  arrange(desc(Frequency)) |>
+  rename(Outcome = outcome) |>
   knitr::kable(format = "html")
 ```
 
+```{r}
+#| label: fig-outcome-distribution-reproduction
+#| fig-cap: "Distribution of reproduction outcomes."
+#| eval: !expr data_available
 
+repro_df <- flora |>
+  filter(type == "reproduction") |>
+  prep_outcomes() |>
+  count(outcome) |>
+  mutate(
+    pct  = n / sum(n),
+    text = paste0(outcome, ": ", n, " (", percent(pct, accuracy = 0.1), ")")
+  )
 
-## Reproduction Attempts
+p_repro_dist <- ggplot(repro_df,
+                       aes(x = n, y = "Reproductions",
+                           fill = outcome, text = text)) +
+  geom_col(position = "stack", width = 0.5) +
+  scale_fill_manual(values = outcome_colors, name = NULL) +
+  scale_x_continuous(labels = label_number(big.mark = ",")) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor   = element_blank())
 
-### Computational Success
-- overview
+render_plot(p_repro_dist)
+```
 
-### Robustness
+### Outcomes Over Time (Original Study Year)
 
+- Describe the temporal coverage: which decade(s) the original studies span, and where the bulk of reproduced studies are concentrated.
+- Comment on whether older or more recent original studies tend to reproduce better — keeping in mind selection effects (newer studies are more likely to share data, older studies less likely to be picked for reproduction).
 
-## Cross-Disciplinary Comparisons
+```{r}
+#| label: fig-repro-outcomes-year-o
+#| fig-cap: "Reproduction outcomes by publication year of the original study."
+#| eval: !expr data_available
 
+p <- flora |>
+  filter(type == "reproduction", !is.na(year_o)) |>
+  prep_outcomes() |>
+  count(year_o, outcome) |>
+  mutate(text = paste0("Year: ", year_o, "<br>",
+                       outcome, ": ", n)) |>
+  ggplot(aes(x = year_o, y = n, fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Original publication year", y = "Number of entries") +
+  theme_minimal()
 
+render_plot(p)
+```
+
+### Outcomes Over Time (Reproduction Study Year)
+
+- Describe how the volume of reproduction attempts has evolved over time (likely a sharp rise after the launch of I4R and similar initiatives).
+- Note whether the share of failed/mixed reproductions has changed in recent years (e.g., as reporting standards tighten or as more journals adopt data-sharing policies).
+
+```{r}
+#| label: fig-repro-outcomes-year-r
+#| fig-cap: "Reproduction outcomes by publication year of the reproduction study."
+#| eval: !expr data_available
+
+p <- flora |>
+  filter(type == "reproduction", !is.na(year_r)) |>
+  prep_outcomes() |>
+  count(year_r, outcome) |>
+  mutate(text = paste0("Year: ", year_r, "<br>",
+                       outcome, ": ", n)) |>
+  ggplot(aes(x = year_r, y = n, fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Reproduction publication year", y = "Number of entries") +
+  theme_minimal()
+
+render_plot(p)
+```
+
+### Outcomes by Original Journal
+
+- Highlight which original-study journals are most frequently targeted for reproductions (likely top economics/political science journals if I4R is the main source).
+- Compare success rates across journals, but caution against over-interpreting differences given small per-journal sample sizes.
+- Mention that the figure shows the top 15 journals only and that the full breakdown is available in the database.
+
+```{r}
+#| label: fig-repro-outcomes-journal-o
+#| fig-cap: "Reproduction outcomes by journal of the original study (top 15 journals)."
+#| eval: !expr data_available
+
+top_journals <- flora |>
+  filter(type == "reproduction", !is.na(journal_o)) |>
+  count(journal_o, sort = TRUE) |>
+  slice_head(n = 15) |>
+  pull(journal_o)
+
+p <- flora |>
+  filter(type == "reproduction", journal_o %in% top_journals) |>
+  prep_outcomes() |>
+  count(journal_o, outcome) |>
+  mutate(text = paste0(journal_o, "<br>", outcome, ": ", n)) |>
+  ggplot(aes(x = n,
+             y = reorder(journal_o, n, sum),
+             fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Number of entries", y = NULL) +
+  theme_minimal()
+
+render_plot(p)
+```
+
+### Outcomes by Reproduction Journal
+
+- Identify the outlets that publish most reproduction reports (e.g., I4R reports, *Journal of Comments and Replications in Economics*, etc.).
+- Briefly discuss how concentrated or dispersed the publishing landscape for reproductions is.
+
+```{r}
+#| label: fig-repro-outcomes-journal-r
+#| fig-cap: "Reproduction outcomes by journal of the reproduction study (top 15 journals)."
+#| eval: !expr data_available
+
+top_journals_r <- flora |>
+  filter(type == "reproduction", !is.na(journal_r)) |>
+  count(journal_r, sort = TRUE) |>
+  slice_head(n = 15) |>
+  pull(journal_r)
+
+p <- flora |>
+  filter(type == "reproduction", journal_r %in% top_journals_r) |>
+  prep_outcomes() |>
+  count(journal_r, outcome) |>
+  mutate(text = paste0(journal_r, "<br>", outcome, ": ", n)) |>
+  ggplot(aes(x = n,
+             y = reorder(journal_r, n, sum),
+             fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Number of entries", y = NULL) +
+  theme_minimal()
+
+render_plot(p)
+```
 
 ## Replication Attempts
 
-### Replications Across Disciplines
+- Define *replication* as used in FLoRA (new data collection, ranging from close/direct to conceptual; self-identified as a replication).
+- Note the main source (FReD, supplemented by OpenAlex search) and the inclusion criteria (e.g., must self-identify, must target a specific original study).
+- Briefly contrast with reproductions to set up the section.
 
+### Outcomes
 
-### Replication Outcomes Over Time
+- Summarise @tbl-outcomes-replication: total replications, share successful, mixed, failed, inconclusive.
+- Refer to @fig-outcome-distribution-replication and compare the distribution to the one for reproductions (likely a higher failure rate).
+- Discuss possible reasons for the failure rate (publication bias toward "interesting" — i.e., failed — replications, methodological differences in conceptual replications, lower power in original studies).
 
 ```{r}
-#| label: fig-outcomes-time
-#| fig-cap: "Replication outcomes by publication year of the original study."
+#| label: tbl-outcomes-replication
+#| tbl-cap: "Replication outcomes."
 #| eval: !expr data_available
 
 flora |>
-  filter(type == "replication", !is.na(outcome), !is.na(year_o)) |>
-  count(year_o, outcome) |>
-  ggplot(aes(x = year_o, y = n, fill = outcome)) +
-  geom_col() +
-  labs(x = "Original publication year", y = "Number of entries", fill = "Outcome") +
-  theme_minimal()
+  filter(type == "replication", !is.na(outcome)) |>
+  count(outcome, name = "Frequency") |>
+  filter(Frequency > 0) |>
+  arrange(desc(Frequency)) |>
+  rename(Outcome = outcome) |>
+  knitr::kable(format = "html")
 ```
+
+```{r}
+#| label: fig-outcome-distribution-replication
+#| fig-cap: "Distribution of replication outcomes."
+#| eval: !expr data_available
+
+repl_df <- flora |>
+  filter(type == "replication") |>
+  prep_outcomes() |>
+  count(outcome) |>
+  mutate(
+    pct  = n / sum(n),
+    text = paste0(outcome, ": ", n, " (", percent(pct, accuracy = 0.1), ")")
+  )
+
+p_repl_dist <- ggplot(repl_df,
+                      aes(x = n, y = "Replications",
+                          fill = outcome, text = text)) +
+  geom_col(position = "stack", width = 0.5) +
+  scale_fill_manual(values = outcome_colors, name = NULL) +
+  scale_x_continuous(labels = label_number(big.mark = ",")) +
+  labs(x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor   = element_blank())
+
+render_plot(p_repl_dist)
+```
+
+### Outcomes Over Time (Original Study Year)
+
+- Describe the temporal range of the original studies that have been replicated and where the bulk lies (probably 1990s–2010s).
+- Comment on any visible trend in success rates by original-study year (e.g., are pre-2011 "replication crisis" studies replicating less well than more recent ones?).
+
+```{r}
+#| label: fig-repl-outcomes-year-o
+#| fig-cap: "Replication outcomes by publication year of the original study."
+#| eval: !expr data_available
+
+p <- flora |>
+  filter(type == "replication", !is.na(year_o)) |>
+  prep_outcomes() |>
+  count(year_o, outcome) |>
+  mutate(text = paste0("Year: ", year_o, "<br>",
+                       outcome, ": ", n)) |>
+  ggplot(aes(x = year_o, y = n, fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Original publication year", y = "Number of entries") +
+  theme_minimal()
+
+render_plot(p)
+```
+
+### Outcomes Over Time (Replication Study Year)
+
+- Describe the rise of replication activity over time, likely with a clear post-2015 surge driven by RP:P, ManyLabs, RRR, and related projects.
+- Comment on whether the share of successful replications has changed over time — improvements may reflect better methods (preregistration, larger samples) and/or shifting selection of which originals get replicated.
+
+```{r}
+#| label: fig-repl-outcomes-year-r
+#| fig-cap: "Replication outcomes by publication year of the replication study."
+#| eval: !expr data_available
+
+p <- flora |>
+  filter(type == "replication", !is.na(year_r)) |>
+  prep_outcomes() |>
+  count(year_r, outcome) |>
+  mutate(text = paste0("Year: ", year_r, "<br>",
+                       outcome, ": ", n)) |>
+  ggplot(aes(x = year_r, y = n, fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Replication publication year", y = "Number of entries") +
+  theme_minimal()
+
+render_plot(p)
+```
+
+### Outcomes by Original Journal
+
+- Note which original-study journals dominate the replication record (likely *Psychological Science*, *JPSP*, *PNAS*, *Science*, etc.).
+- Compare success rates across these journals — but caveat that this reflects which findings were *selected* for replication, not journal quality per se.
+
+```{r}
+#| label: fig-repl-outcomes-journal-o
+#| fig-cap: "Replication outcomes by journal of the original study (top 15 journals)."
+#| eval: !expr data_available
+
+top_journals <- flora |>
+  filter(type == "replication", !is.na(journal_o)) |>
+  count(journal_o, sort = TRUE) |>
+  slice_head(n = 15) |>
+  pull(journal_o)
+
+p <- flora |>
+  filter(type == "replication", journal_o %in% top_journals) |>
+  prep_outcomes() |>
+  count(journal_o, outcome) |>
+  mutate(text = paste0(journal_o, "<br>", outcome, ": ", n)) |>
+  ggplot(aes(x = n,
+             y = reorder(journal_o, n, sum),
+             fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Number of entries", y = NULL) +
+  theme_minimal()
+
+render_plot(p)
+```
+
+### Outcomes by Replication Journal
+
+- Identify the outlets that publish most replications (e.g., *Collabra: Psychology*, *SPPS*, *Royal Society Open Science*, *Meta-Psychology*, *AMPPS*).
+- Comment on whether replication-friendly journals show a different mix of outcomes than mainstream journals — this can hint at whether there is publication bias against null replications.
+
+```{r}
+#| label: fig-repl-outcomes-journal-r
+#| fig-cap: "Replication outcomes by journal of the replication study (top 15 journals)."
+#| eval: !expr data_available
+
+top_journals_r <- flora |>
+  filter(type == "replication", !is.na(journal_r)) |>
+  count(journal_r, sort = TRUE) |>
+  slice_head(n = 15) |>
+  pull(journal_r)
+
+p <- flora |>
+  filter(type == "replication", journal_r %in% top_journals_r) |>
+  prep_outcomes() |>
+  count(journal_r, outcome) |>
+  mutate(text = paste0(journal_r, "<br>", outcome, ": ", n)) |>
+  ggplot(aes(x = n,
+             y = reorder(journal_r, n, sum),
+             fill = outcome, text = text)) +
+  geom_col() +
+  scale_fill_manual(values = outcome_colors, name = "Outcome") +
+  labs(x = "Number of entries", y = NULL) +
+  theme_minimal()
+
+render_plot(p)
+```
+
+## Summary
+
+- Pull together the headline numbers: how many replications, how many reproductions, what share of each was successful.
+- Highlight 1–2 of the most striking findings from the figures above (e.g., growth over time, concentration in a few journals, differences between replications and reproductions).
+- Briefly point forward to the discussion section.
