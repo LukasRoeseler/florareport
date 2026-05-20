@@ -43,10 +43,8 @@ format:
     code-tools: false
     citations-hover: true
     crossrefs-hover: true
-  typst:
-    output-file: "FLoRA-report"
-    toc: true
-    toc-depth: 3
+    typst:
+    output-file: "FLoRA-report.pdf"
     papersize: a4
 
 bibliography: references.bib

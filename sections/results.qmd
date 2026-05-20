@@ -49,9 +49,16 @@ prep_outcomes <- function(df) {
 
 ## Overview of the Current Database
 
-- State the date of the current snapshot (consider pulling this dynamically from the data file timestamp, e.g., `format(file.info("data/flora.csv")$mtime, "%B %Y")`).
-- Walk the reader through @tbl-overview: total number of entries, share of replications vs. reproductions, ratio of unique original to unique replication studies (i.e., how often the same original study has been replicated multiple times).
-- Note any caveats about coverage (e.g., the database is non-exhaustive, English-language bias, dependence on self-identification as a replication).
+-   State the date of the current snapshot (consider pulling this
+    dynamically from the data file timestamp, e.g.,
+    `format(file.info("data/flora.csv")$mtime, "%B %Y")`).
+-   Walk the reader through @tbl-overview: total number of entries,
+    share of replications vs. reproductions, ratio of unique original to
+    unique replication studies (i.e., how often the same original study
+    has been replicated multiple times).
+-   Note any caveats about coverage (e.g., the database is
+    non-exhaustive, English-language bias, dependence on
+    self-identification as a replication).
 
 ```{r}
 #| label: tbl-overview
@@ -73,15 +80,23 @@ knitr::kable(flora_summary, format = "html")
 
 ## Reproduction Attempts
 
-- Define what is meant by *reproduction* in FLoRA (re-running analyses on the same data, distinguishing computational reproducibility from robustness).
-- Mention the main sources of reproductions (Replication Network list, Institute for Replication reports).
-- Flag that, unlike replications, reproductions test the same data and so any failure points more directly to coding/analytic issues.
+-   Define what is meant by *reproduction* in FLoRA (re-running analyses
+    on the same data, distinguishing computational reproducibility from
+    robustness).
+-   Mention the main sources of reproductions (Replication Network list,
+    Institute for Replication reports).
+-   Flag that, unlike replications, reproductions test the same data and
+    so any failure points more directly to coding/analytic issues.
 
 ### Outcomes
 
-- Summarise @tbl-outcomes-reproduction in prose: total number of reproductions, share that were successful, share that failed, share that were mixed/inconclusive.
-- Refer the reader to @fig-outcome-distribution-reproduction for a visual overview.
-- Consider commenting on the (probable) low share of "inconclusive" outcomes and what that means in practice.
+-   Summarise @tbl-outcomes-reproduction in prose: total number of
+    reproductions, share that were successful, share that failed, share
+    that were mixed/inconclusive.
+-   Refer the reader to @fig-outcome-distribution-reproduction for a
+    visual overview.
+-   Consider commenting on the (probable) low share of "inconclusive"
+    outcomes and what that means in practice.
 
 ```{r}
 #| label: tbl-outcomes-reproduction
@@ -128,8 +143,12 @@ render_plot(p_repro_dist)
 
 ### Outcomes Over Time (Original Study Year)
 
-- Describe the temporal coverage: which decade(s) the original studies span, and where the bulk of reproduced studies are concentrated.
-- Comment on whether older or more recent original studies tend to reproduce better — keeping in mind selection effects (newer studies are more likely to share data, older studies less likely to be picked for reproduction).
+-   Describe the temporal coverage: which decade(s) the original studies
+    span, and where the bulk of reproduced studies are concentrated.
+-   Comment on whether older or more recent original studies tend to
+    reproduce better — keeping in mind selection effects (newer studies
+    are more likely to share data, older studies less likely to be
+    picked for reproduction).
 
 ```{r}
 #| label: fig-repro-outcomes-year-o
@@ -153,8 +172,12 @@ render_plot(p)
 
 ### Outcomes Over Time (Reproduction Study Year)
 
-- Describe how the volume of reproduction attempts has evolved over time (likely a sharp rise after the launch of I4R and similar initiatives).
-- Note whether the share of failed/mixed reproductions has changed in recent years (e.g., as reporting standards tighten or as more journals adopt data-sharing policies).
+-   Describe how the volume of reproduction attempts has evolved over
+    time (likely a sharp rise after the launch of I4R and similar
+    initiatives).
+-   Note whether the share of failed/mixed reproductions has changed in
+    recent years (e.g., as reporting standards tighten or as more
+    journals adopt data-sharing policies).
 
 ```{r}
 #| label: fig-repro-outcomes-year-r
@@ -178,9 +201,13 @@ render_plot(p)
 
 ### Outcomes by Original Journal
 
-- Highlight which original-study journals are most frequently targeted for reproductions (likely top economics/political science journals if I4R is the main source).
-- Compare success rates across journals, but caution against over-interpreting differences given small per-journal sample sizes.
-- Mention that the figure shows the top 15 journals only and that the full breakdown is available in the database.
+-   Highlight which original-study journals are most frequently targeted
+    for reproductions (likely top economics/political science journals
+    if I4R is the main source).
+-   Compare success rates across journals, but caution against
+    over-interpreting differences given small per-journal sample sizes.
+-   Mention that the figure shows the top 15 journals only and that the
+    full breakdown is available in the database.
 
 ```{r}
 #| label: fig-repro-outcomes-journal-o
@@ -211,8 +238,11 @@ render_plot(p)
 
 ### Outcomes by Reproduction Journal
 
-- Identify the outlets that publish most reproduction reports (e.g., I4R reports, *Journal of Comments and Replications in Economics*, etc.).
-- Briefly discuss how concentrated or dispersed the publishing landscape for reproductions is.
+-   Identify the outlets that publish most reproduction reports (e.g.,
+    I4R reports, *Journal of Comments and Replications in Economics*,
+    etc.).
+-   Briefly discuss how concentrated or dispersed the publishing
+    landscape for reproductions is.
 
 ```{r}
 #| label: fig-repro-outcomes-journal-r
@@ -243,15 +273,25 @@ render_plot(p)
 
 ## Replication Attempts
 
-- Define *replication* as used in FLoRA (new data collection, ranging from close/direct to conceptual; self-identified as a replication).
-- Note the main source (FReD, supplemented by OpenAlex search) and the inclusion criteria (e.g., must self-identify, must target a specific original study).
-- Briefly contrast with reproductions to set up the section.
+-   Define *replication* as used in FLoRA (new data collection, ranging
+    from close/direct to conceptual; self-identified as a replication).
+-   Note the main source (FReD, supplemented by OpenAlex search) and the
+    inclusion criteria (e.g., must self-identify, must target a specific
+    original study).
+-   Briefly contrast with reproductions to set up the section.
+-   
 
 ### Outcomes
 
-- Summarise @tbl-outcomes-replication: total replications, share successful, mixed, failed, inconclusive.
-- Refer to @fig-outcome-distribution-replication and compare the distribution to the one for reproductions (likely a higher failure rate).
-- Discuss possible reasons for the failure rate (publication bias toward "interesting" — i.e., failed — replications, methodological differences in conceptual replications, lower power in original studies).
+-   Summarise @tbl-outcomes-replication: total replications, share
+    successful, mixed, failed, inconclusive.
+-   Refer to @fig-outcome-distribution-replication and compare the
+    distribution to the one for reproductions (likely a higher failure
+    rate).
+-   Discuss possible reasons for the failure rate (publication bias
+    toward "interesting" — i.e., failed — replications, methodological
+    differences in conceptual replications, lower power in original
+    studies).
 
 ```{r}
 #| label: tbl-outcomes-replication
@@ -298,8 +338,11 @@ render_plot(p_repl_dist)
 
 ### Outcomes Over Time (Original Study Year)
 
-- Describe the temporal range of the original studies that have been replicated and where the bulk lies (probably 1990s–2010s).
-- Comment on any visible trend in success rates by original-study year (e.g., are pre-2011 "replication crisis" studies replicating less well than more recent ones?).
+-   Describe the temporal range of the original studies that have been
+    replicated and where the bulk lies (probably 1990s–2010s).
+-   Comment on any visible trend in success rates by original-study year
+    (e.g., are pre-2011 "replication crisis" studies replicating less
+    well than more recent ones?).
 
 ```{r}
 #| label: fig-repl-outcomes-year-o
@@ -323,8 +366,13 @@ render_plot(p)
 
 ### Outcomes Over Time (Replication Study Year)
 
-- Describe the rise of replication activity over time, likely with a clear post-2015 surge driven by RP:P, ManyLabs, RRR, and related projects.
-- Comment on whether the share of successful replications has changed over time — improvements may reflect better methods (preregistration, larger samples) and/or shifting selection of which originals get replicated.
+-   Describe the rise of replication activity over time, likely with a
+    clear post-2015 surge driven by RP:P, ManyLabs, RRR, and related
+    projects.
+-   Comment on whether the share of successful replications has changed
+    over time — improvements may reflect better methods
+    (preregistration, larger samples) and/or shifting selection of which
+    originals get replicated.
 
 ```{r}
 #| label: fig-repl-outcomes-year-r
@@ -348,8 +396,11 @@ render_plot(p)
 
 ### Outcomes by Original Journal
 
-- Note which original-study journals dominate the replication record (likely *Psychological Science*, *JPSP*, *PNAS*, *Science*, etc.).
-- Compare success rates across these journals — but caveat that this reflects which findings were *selected* for replication, not journal quality per se.
+-   Note which original-study journals dominate the replication record
+    (likely *Psychological Science*, *JPSP*, *PNAS*, *Science*, etc.).
+-   Compare success rates across these journals — but caveat that this
+    reflects which findings were *selected* for replication, not journal
+    quality per se.
 
 ```{r}
 #| label: fig-repl-outcomes-journal-o
@@ -380,8 +431,12 @@ render_plot(p)
 
 ### Outcomes by Replication Journal
 
-- Identify the outlets that publish most replications (e.g., *Collabra: Psychology*, *SPPS*, *Royal Society Open Science*, *Meta-Psychology*, *AMPPS*).
-- Comment on whether replication-friendly journals show a different mix of outcomes than mainstream journals — this can hint at whether there is publication bias against null replications.
+-   Identify the outlets that publish most replications (e.g.,
+    *Collabra: Psychology*, *SPPS*, *Royal Society Open Science*,
+    *Meta-Psychology*, *AMPPS*).
+-   Comment on whether replication-friendly journals show a different
+    mix of outcomes than mainstream journals — this can hint at whether
+    there is publication bias against null replications.
 
 ```{r}
 #| label: fig-repl-outcomes-journal-r
@@ -412,6 +467,9 @@ render_plot(p)
 
 ## Summary
 
-- Pull together the headline numbers: how many replications, how many reproductions, what share of each was successful.
-- Highlight 1–2 of the most striking findings from the figures above (e.g., growth over time, concentration in a few journals, differences between replications and reproductions).
-- Briefly point forward to the discussion section.
+-   Pull together the headline numbers: how many replications, how many
+    reproductions, what share of each was successful.
+-   Highlight 1–2 of the most striking findings from the figures above
+    (e.g., growth over time, concentration in a few journals,
+    differences between replications and reproductions).
+-   Briefly point forward to the discussion section.
