@@ -119,6 +119,8 @@ version of the FLoRA dataset. Last build: **`r format(Sys.time(), "%Y-%m-%d %H:%
 
 {{< include sections/methods.md >}}
 
+{{< include sections/pipeline.md >}}
+
 {{< include sections/results.qmd >}}
 
 {{< include sections/discussion.md >}}

@@ -17,7 +17,8 @@ All prose lives in plain Markdown files inside `sections/`. You do **not** need 
 | `sections/abstract.md` | Abstract (~150–300 words) |
 | `sections/lay-summary.md` | Plain-language summary (~150–250 words) |
 | `sections/theory.md` | Background, replication crises, FReD → FLoRA, definitions |
-| `sections/methods.md` | Inclusion criteria, outcome coding, data sources, pipeline |
+| `sections/methods.md` | Inclusion criteria, outcome coding, data sources |
+| `sections/pipeline.md` | pipeline |
 | `sections/results.qmd` | Results prose + R code for figures and tables |
 | `sections/discussion.md` | Patterns in replicability and reproducibility, implications |
 | `sections/limitations.md` | Caveats and scope |
