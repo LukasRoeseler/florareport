@@ -38,10 +38,12 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Pinned to 22.04 (jammy): Posit Public RSPM ships binary R packages for
+    # jammy, so setup-r-dependencies installs in ~1 min instead of compiling
+    # tidyverse from source for 30+ min on noble.
+    runs-on: ubuntu-22.04
 
     env:
-      RENV_PATHS_ROOT: ~/.cache/R/renv
       # URL of the canonical FLoRA CSV. Override via repo variable FLORA_CSV_URL.
       FLORA_CSV_URL: ${{ vars.FLORA_CSV_URL || 'https://raw.githubusercontent.com/forrtproject/FReD-data/refs/heads/main/output/flora.csv' }}
 
@@ -59,13 +61,6 @@ jobs:
         with:
           r-version: "4.4.1"
           use-public-rspm: true
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev \
-            libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev \
-            libpng-dev libtiff5-dev libjpeg-dev pandoc
 
       - name: Install R packages
         uses: r-lib/actions/setup-r-dependencies@v2
