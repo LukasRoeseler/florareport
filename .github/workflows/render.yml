@@ -44,8 +44,10 @@ jobs:
     runs-on: ubuntu-22.04
     # Guards against the render hanging indefinitely (GitHub's default job
     # timeout is 6 hours) so a stuck run fails fast and visibly instead of
-    # silently blocking every subsequent scheduled run.
-    timeout-minutes: 20
+    # silently blocking every subsequent scheduled run. Comfortably above
+    # the PDF step's own 15-minute timeout plus the ~5 minutes the rest of
+    # the job (R/Quarto setup, data download, HTML render) takes.
+    timeout-minutes: 25
 
     env:
       # URL of the canonical FLoRA CSV. Override via repo variable FLORA_CSV_URL.
@@ -125,7 +127,13 @@ jobs:
       - name: Render Quarto report (PDF, best-effort)
         run: quarto render --to typst
         continue-on-error: true
-        timeout-minutes: 5
+        # Rendering 4 Mermaid diagrams to PNG via headless Chromium plus the
+        # Typst compile routinely takes longer than 5 minutes; a step that
+        # hits timeout-minutes is killed but still reports conclusion
+        # "success" here (continue-on-error masks it), so a too-short limit
+        # silently produces no PDF instead of visibly failing. 15 minutes
+        # leaves headroom under the job's 25-minute cap for the steps after.
+        timeout-minutes: 15
 
       # The report's HTML pages are the only thing that must build for the
       # site to deploy. Rendering it on its own (rather than a plain
