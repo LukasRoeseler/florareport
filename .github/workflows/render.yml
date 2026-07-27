@@ -42,6 +42,10 @@ jobs:
     # jammy, so setup-r-dependencies installs in ~1 min instead of compiling
     # tidyverse from source for 30+ min on noble.
     runs-on: ubuntu-22.04
+    # Guards against the render hanging indefinitely (GitHub's default job
+    # timeout is 6 hours) so a stuck run fails fast and visibly instead of
+    # silently blocking every subsequent scheduled run.
+    timeout-minutes: 20
 
     env:
       # URL of the canonical FLoRA CSV. Override via repo variable FLORA_CSV_URL.
@@ -103,8 +107,29 @@ jobs:
               https://raw.githubusercontent.com/forrtproject/flora-explorer/refs/heads/main/logo.svg
           fi
 
-      - name: Render Quarto report
-        run: quarto render
+      # The report's HTML pages are the only thing that must build for the
+      # site to deploy. Rendering it on its own (rather than a plain
+      # `quarto render`, which also builds the "typst" PDF target) keeps the
+      # PDF export below from being able to block or break the site update.
+      - name: Render Quarto report (HTML)
+        run: quarto render --to html
+
+      # The PDF export renders the report's Mermaid diagrams (see
+      # sections/pipeline.md) to static images, which requires a headless
+      # Chromium. That step hung for hours in CI (job auto-cancelled after
+      # GitHub's 6h default timeout) until Chromium was installed explicitly
+      # below, and headless-Chrome rendering remains inherently more fragile
+      # than plain HTML. Keep it best-effort: `continue-on-error` plus a
+      # short per-step timeout mean a flaky PDF render is skipped rather than
+      # ever blocking the (required) HTML deploy again.
+      - name: Install Chromium for Quarto (PDF/Mermaid rendering)
+        run: quarto install chromium --no-prompt
+        continue-on-error: true
+
+      - name: Render Quarto report (PDF, best-effort)
+        run: quarto render --to typst
+        continue-on-error: true
+        timeout-minutes: 5
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
